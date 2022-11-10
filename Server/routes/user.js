@@ -88,7 +88,7 @@ router.post("/login", Validator("login"), async (req, res) => {
   }
 });
 
-router.post("/refresh-token", async (req, res) => {
+router.get("/refresh-token", async (req, res) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken)
@@ -99,14 +99,16 @@ router.post("/refresh-token", async (req, res) => {
     try {
       user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
-      return res.status(498).json({ message: "Invalid Token" });
+      if (err.message === "invalid signature")
+        return res.status(498).json({ message: "Invalid Token" });
+      return res.status(498).json({ message: err.message });
     }
 
     const newAccessToken = generateToken(user);
     const newRefreshToken = generateRereshToken(user);
 
     const tokenInDB = await Tokens.findOne({
-      $and: [{ userId: user._id }, { refreshToken: refreshToken }],
+      $and: [{ userId: user.userId }, { refreshToken: refreshToken }],
     });
 
     if (!tokenInDB)
@@ -116,7 +118,7 @@ router.post("/refresh-token", async (req, res) => {
 
     const newToken = await updateToken({
       res,
-      userId: user._id,
+      userId: user.userId,
       refreshToken: newRefreshToken,
       accessToken: newAccessToken,
     });
@@ -160,7 +162,7 @@ const generateToken = (user) => {
 
 const generateRereshToken = (user) => {
   return jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "15d",
   });
 };
 
