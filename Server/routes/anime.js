@@ -36,7 +36,7 @@ router.get("/top-airing", async (req, res) => {
     res.status(200).json({ ...response.data, success: true });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: err.message, success: false });
+    res.status(503).json({ message: err.message, success: false });
   }
 });
 
@@ -60,7 +60,7 @@ router.get("/upcoming", async (req, res) => {
     res.status(200).json({ ...response.data, success: true });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: err.message, success: false });
+    res.status(503).json({ message: err.message, success: false });
   }
 });
 
