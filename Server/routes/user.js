@@ -41,14 +41,15 @@ router.post("/signup", Validator("signup"), async (req, res) => {
       _doc: { accessToken, refreshToken, userId },
     } = await newToken.save();
 
-    res.header("Authorization", `Bearer ${accessToken}`).status(200).json({
+    res.header("Authorization", `Bearer ${accessToken}`).status(201).json({
       accessToken,
       refreshToken,
       userId,
       message: "User registerd successfully.",
+      success: true,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message, success: false });
   }
 });
 
@@ -58,12 +59,12 @@ router.post("/login", Validator("login"), async (req, res) => {
   try {
     const user = await User.findOne({ email: email });
     if (!user)
-      return res.status(403).json({ message: "Incorrect email or password." });
+      return res.status(401).json({ message: "Incorrect email or password." });
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword)
-      return res.status(403).json({ message: "Incorrect email or password." });
+      return res.status(401).json({ message: "Incorrect email or password." });
 
     const accessToken = generateToken(user);
     const refreshToken = generateRereshToken(user);
@@ -113,7 +114,7 @@ router.get("/refresh-token", async (req, res) => {
 
     if (!tokenInDB)
       return res
-        .status(400)
+        .status(404)
         .json({ message: "User or Token doesn't exist in the DB" });
 
     const newToken = await updateToken({
@@ -125,7 +126,7 @@ router.get("/refresh-token", async (req, res) => {
 
     res
       .header("Authorization", `Bearer ${newToken.accessToken}`)
-      .status(200)
+      .status(201)
       .json({
         accessToken: newToken.accessToken,
         refreshToken: newToken.refreshToken,
@@ -150,7 +151,7 @@ const updateToken = async ({ res, userId, accessToken, refreshToken }) => {
 
     return newToken;
   } catch (err) {
-    return res.status(500).json({ mesage: err.message });
+    return res.status(503).json({ mesage: err.message });
   }
 };
 
