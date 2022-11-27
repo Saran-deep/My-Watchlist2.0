@@ -33,6 +33,7 @@ router.get("/top-airing", async (req, res) => {
     };
 
     const response = await axiosInstance.post("/", data, requestOptions);
+    console.log(response);
     res.status(200).json({ ...response.data, success: true });
   } catch (err) {
     console.log(err);
