@@ -53,3 +53,9 @@ body {
 .swiper-button-disabled {
   display: none !important;
 }
+
+/*----------- Input Field ---------------*/
+
+.customInput .customInput_input:focus + .customInput_icon {
+  color: rgba(204, 0, 0, 0.9);
+}

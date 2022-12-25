@@ -10,13 +10,46 @@ const {
 const router = express.Router();
 
 const axiosInstance = axios.create({
+  // baseURL: "https://kitsu.io/api/edge",
   baseURL: ANIME_API_URL,
 });
 
 axiosInstance.defaults.headers.common["Content-Type"] = "application/json";
 axiosInstance.defaults.headers.common["Accept"] = "application/json";
+axiosInstance.defaults.headers.common["Accept-Encoding"] = "identity";
 
-router.get("/top-airing", async (req, res) => {
+// https://kitsu.io/api/edge/
+
+router.get("/home", async (req, res) => {
+  try {
+    // const upcomingAnimes = await getUpcomingAnimes();
+    const topAiringAnimes = await getTopAiringAnimes();
+
+    console.log(topAiringAnimes);
+    res.status(200).json({
+      topAiringAnimes: { ...topAiringAnimes.data.Page },
+      // topAiringAnimes: topAiringAnimes,
+
+      // upcomingAnimes: { ...upcomingAnimes.data.Page },
+      status: true,
+    });
+  } catch (err) {
+    res.status(503).json({ message: err.message, status: false });
+  }
+});
+
+// const getTopAiringAnimes = async () => {
+//   try {
+//     const response = await axiosInstance.get(
+//       "/trending/anime"
+//     );
+//     return response.data;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
+
+const getTopAiringAnimes = async () => {
   const variable = JSON.stringify({
     year: 2022,
     pageNo: 1,
@@ -26,22 +59,18 @@ router.get("/top-airing", async (req, res) => {
     const requestOptions = {
       headers: { "Content-Type": "application/json" },
     };
-
     const data = {
       query: TOP_AIRINGS_ANIME_QUERY,
       variables: variable,
     };
-
     const response = await axiosInstance.post("/", data, requestOptions);
-    console.log(response);
-    res.status(200).json({ ...response.data, success: true });
+    return response.data;
   } catch (err) {
-    console.log(err);
-    res.status(503).json({ message: err.message, success: false });
+    throw err;
   }
-});
+};
 
-router.get("/upcoming", async (req, res) => {
+const getUpcomingAnimes = async () => {
   const variable = JSON.stringify({
     year: 2022,
     pageNo: 1,
@@ -58,11 +87,11 @@ router.get("/upcoming", async (req, res) => {
     };
 
     const response = await axiosInstance.post("/", data, requestOptions);
-    res.status(200).json({ ...response.data, success: true });
+
+    return response.data;
   } catch (err) {
-    console.log(err);
-    res.status(503).json({ message: err.message, success: false });
+    throw err;
   }
-});
+};
 
 module.exports = router;

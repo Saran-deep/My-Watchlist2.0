@@ -18,7 +18,9 @@ router.post("/signup", Validator("signup"), async (req, res) => {
   try {
     const emailExist = await User.findOne({ email: email });
     if (emailExist)
-      return res.status(400).json({ message: "Email already registerd." });
+      return res
+        .status(400)
+        .json({ message: "Email already registerd.", status: false });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -46,10 +48,10 @@ router.post("/signup", Validator("signup"), async (req, res) => {
       refreshToken,
       userId,
       message: "User registerd successfully.",
-      success: true,
+      status: true,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message, success: false });
+    res.status(500).json({ message: err.message, status: false });
   }
 });
 
@@ -59,12 +61,16 @@ router.post("/login", Validator("login"), async (req, res) => {
   try {
     const user = await User.findOne({ email: email });
     if (!user)
-      return res.status(401).json({ message: "Incorrect email or password." });
+      return res
+        .status(401)
+        .json({ message: "Incorrect email or password.", status: false });
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword)
-      return res.status(401).json({ message: "Incorrect email or password." });
+      return res
+        .status(401)
+        .json({ message: "Incorrect email or password.", status: false });
 
     const accessToken = generateToken(user);
     const refreshToken = generateRereshToken(user);
@@ -83,9 +89,10 @@ router.post("/login", Validator("login"), async (req, res) => {
         message: "User logged in successfully.",
         accessToken: newToken.accessToken,
         refreshToken: newToken.refreshToken,
+        status: true,
       });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message, status: false });
   }
 });
 
@@ -93,7 +100,9 @@ router.get("/refresh-token", async (req, res) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken)
-    return res.status(401).json({ message: "No refresh token found." });
+    return res
+      .status(401)
+      .json({ message: "No refresh token found.", status: false });
 
   try {
     let user;
@@ -101,8 +110,10 @@ router.get("/refresh-token", async (req, res) => {
       user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
       if (err.message === "invalid signature")
-        return res.status(498).json({ message: "Invalid Token" });
-      return res.status(498).json({ message: err.message });
+        return res
+          .status(498)
+          .json({ message: "Invalid Token", status: false });
+      return res.status(498).json({ message: err.message, status: false });
     }
 
     const newAccessToken = generateToken(user);
@@ -113,9 +124,10 @@ router.get("/refresh-token", async (req, res) => {
     });
 
     if (!tokenInDB)
-      return res
-        .status(404)
-        .json({ message: "User or Token doesn't exist in the DB" });
+      return res.status(404).json({
+        message: "User or Token doesn't exist in the DB",
+        status: false,
+      });
 
     const newToken = await updateToken({
       res,
@@ -130,9 +142,10 @@ router.get("/refresh-token", async (req, res) => {
       .json({
         accessToken: newToken.accessToken,
         refreshToken: newToken.refreshToken,
+        status: true,
       });
   } catch (err) {
-    return res.status(500).json({ mesage: err.message });
+    return res.status(500).json({ mesage: err.message, status: false });
   }
 });
 
@@ -145,13 +158,14 @@ const updateToken = async ({ res, userId, accessToken, refreshToken }) => {
     );
 
     if (!newToken)
-      return res
-        .status(404)
-        .json({ message: "No Token found in the database for the user" });
+      return res.status(404).json({
+        message: "No Token found in the database for the user",
+        status: false,
+      });
 
     return newToken;
   } catch (err) {
-    return res.status(503).json({ mesage: err.message });
+    return res.status(503).json({ mesage: err.message, status: false });
   }
 };
 

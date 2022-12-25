@@ -1,6 +1,6 @@
 const ANIME_API_URL = "https://graphql.anilist.co";
 const TIMEOUT_SEC = 10;
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 30;
 
 const attributes = ` 
   id,

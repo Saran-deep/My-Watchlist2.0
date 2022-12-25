@@ -10,6 +10,6 @@ module.exports = validateToken = (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    res.status(403).json({ message: "Invalid Token" });
+    res.status(403).json({ message: "Invalid Token", status: false });
   }
 };

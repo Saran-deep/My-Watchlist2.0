@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Keyboard, Mousewheel, Navigation } from "swiper";
+import { FreeMode, Keyboard, Mousewheel, Navigation, Lazy } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/keyboard";
@@ -10,10 +10,12 @@ import "swiper/css/navigation";
 function Carousel({ components }) {
   return (
     <Swiper
-      modules={[FreeMode, Keyboard, Mousewheel, Navigation]}
+      modules={[FreeMode, Keyboard, Mousewheel, Navigation, Lazy]}
       spaceBetween={10}
+      preloadImages={false}
       keyboard={true}
       navigation={true}
+      lazy={{ loadOnTransitionStart: true }}
       mousewheel={true}
       slidesPerGroup={5}
       slidesPerView={6}
