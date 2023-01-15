@@ -4,7 +4,6 @@ const joiPassword = Joi.extend(joiPasswordExtendCore);
 
 const signupSchema = Joi.object({
   email: Joi.string().email().lowercase().required(),
-  username: Joi.string().min(4).required(),
   password: joiPassword
     .string()
     .minOfSpecialCharacters(1)
@@ -14,6 +13,7 @@ const signupSchema = Joi.object({
     .noWhiteSpaces()
     .min(8)
     .required(),
+  confirmPassword: Joi.any().valid(Joi.ref("password")).required(),
 });
 
 module.exports = signupSchema;

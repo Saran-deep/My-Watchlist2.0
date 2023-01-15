@@ -22,13 +22,13 @@ function MovieCard({
         <div className="swiper-lazy-preloader"></div>
       </div>
       <div className="movie-card__details absolute bottom-[-98px] left-0 px-2 py-1 w-full z-20 duration-[450ms]">
-        <h2 className=" text-my-white-100 text-xl">{title}</h2>
+        <h2 className=" text-my-white-100 text-sm line-clamp-2">{title}</h2>
         <p className=" text-my-white-200 font-medium text-xs">
           <span>Action</span>, <span>Fantasy</span>, <span>Drama</span>
         </p>
         <div>
-          <p className="text-my-white-100 leading-5 font-light text-xs">
-            {desc.substr(0, 20) + "..."}
+          <p className="text-my-white-100 leading-5 font-light text-xs line-clamp-2">
+            {desc}
           </p>
         </div>
       </div>

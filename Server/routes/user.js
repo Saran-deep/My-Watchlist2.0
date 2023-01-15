@@ -2,6 +2,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const validateToken = require("../middlewares/ValidateToken");
+const mongoose = require("mongoose");
 
 const Validator = require("../middlewares/Validator");
 
@@ -13,7 +15,7 @@ const router = express.Router();
 dotenv.config();
 
 router.post("/signup", Validator("signup"), async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     const emailExist = await User.findOne({ email: email });
@@ -26,7 +28,7 @@ router.post("/signup", Validator("signup"), async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
-      username: username,
+      username: null,
       email: email,
       password: hashedPassword,
     });
@@ -90,9 +92,31 @@ router.post("/login", Validator("login"), async (req, res) => {
         accessToken: newToken.accessToken,
         refreshToken: newToken.refreshToken,
         status: true,
+        userId: user._id,
       });
   } catch (err) {
     res.status(500).json({ message: err.message, status: false });
+  }
+});
+
+router.get("/getUser", validateToken, async (req, res) => {
+  const decodedToken = req.user;
+  try {
+    const user = await User.findById(decodedToken.userId);
+
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "User not found.", status: false });
+
+    return res.status(200).json({
+      message: "User details successfully found.",
+      status: true,
+      userId: user._id,
+      username: user.username,
+    });
+  } catch (err) {
+    return res.send(500).json({ message: err.message, status: false });
   }
 });
 
@@ -146,6 +170,51 @@ router.get("/refresh-token", async (req, res) => {
       });
   } catch (err) {
     return res.status(500).json({ mesage: err.message, status: false });
+  }
+});
+
+router.put("/addUsername", validateToken, async (req, res) => {
+  const username = req.body.username;
+  const decodedToken = req.user;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(decodedToken.userId, {
+      username: username,
+    });
+
+    if (!updatedUser)
+      return res
+        .status(404)
+        .json({ message: "User not found.", status: false });
+
+    return res
+      .status(200)
+      .json({ message: "Username added successfully", status: true });
+  } catch (err) {
+    return res.send(500).json({ message: err.message, status: false });
+  }
+});
+
+router.post("/checkUsername", validateToken, async (req, res) => {
+  const username = req.body.username;
+
+  try {
+    const user = await User.findOne({ username: username });
+
+    if (user)
+      return res.status(400).json({
+        message: "Username is not available",
+        isAvailable: false,
+        status: false,
+      });
+
+    res.status(200).json({
+      message: "Username is available",
+      isAvailable: true,
+      status: true,
+    });
+  } catch (err) {
+    return res.send(500).json({ message: err.message, status: false });
   }
 });
 

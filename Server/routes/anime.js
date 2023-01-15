@@ -3,7 +3,7 @@ const axios = require("axios");
 const {
   ANIME_API_URL,
   ITEMS_PER_PAGE,
-  TOP_AIRINGS_ANIME_QUERY,
+  TRENDING_ANIMES_QUERY,
   UPCOMING_ANIMES_QUERY,
 } = require("../config/anime-API-config");
 
@@ -22,15 +22,11 @@ axiosInstance.defaults.headers.common["Accept-Encoding"] = "identity";
 
 router.get("/home", async (req, res) => {
   try {
-    // const upcomingAnimes = await getUpcomingAnimes();
-    const topAiringAnimes = await getTopAiringAnimes();
-
-    console.log(topAiringAnimes);
+    const upcomingAnimes = await getUpcomingAnimes();
+    const trendingAnimes = await getTrendingAnimes();
     res.status(200).json({
-      topAiringAnimes: { ...topAiringAnimes.data.Page },
-      // topAiringAnimes: topAiringAnimes,
-
-      // upcomingAnimes: { ...upcomingAnimes.data.Page },
+      trendingAnimes: { ...trendingAnimes.data.Page },
+      upcomingAnimes: { ...upcomingAnimes.data.Page },
       status: true,
     });
   } catch (err) {
@@ -49,30 +45,31 @@ router.get("/home", async (req, res) => {
 //   }
 // };
 
-const getTopAiringAnimes = async () => {
+const getTrendingAnimes = async () => {
   const variable = JSON.stringify({
-    year: 2022,
     pageNo: 1,
     itemsPerPage: ITEMS_PER_PAGE,
   });
+
   try {
     const requestOptions = {
       headers: { "Content-Type": "application/json" },
     };
     const data = {
-      query: TOP_AIRINGS_ANIME_QUERY,
+      query: TRENDING_ANIMES_QUERY,
       variables: variable,
     };
     const response = await axiosInstance.post("/", data, requestOptions);
+
     return response.data;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
 
 const getUpcomingAnimes = async () => {
   const variable = JSON.stringify({
-    year: 2022,
     pageNo: 1,
     itemsPerPage: ITEMS_PER_PAGE,
   });

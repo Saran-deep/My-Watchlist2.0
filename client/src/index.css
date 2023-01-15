@@ -10,7 +10,7 @@ html,
 body {
   /* width: 100vw; */
   height: 100%;
-  background-color: #0f0f0f;
+  background-color: #0f102b;
 }
 body {
   padding: 0.75rem;
@@ -34,7 +34,7 @@ body {
 }
 
 .movie-card__poster::before {
-  background: linear-gradient(0deg, #242331 45%, transparent);
+  background: linear-gradient(0deg, #24243c 45%, transparent);
 }
 
 .movie-card:hover .movie-card__poster::before {
@@ -52,10 +52,4 @@ body {
 
 .swiper-button-disabled {
   display: none !important;
-}
-
-/*----------- Input Field ---------------*/
-
-.customInput .customInput_input:focus + .customInput_icon {
-  color: rgba(204, 0, 0, 0.9);
 }
