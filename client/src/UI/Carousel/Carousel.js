@@ -24,7 +24,7 @@ function Carousel({ components }) {
       // onSwiper={(swiper) => console.log(swiper)}
       className="carousel"
     >
-      {components.map((item, index) => {
+      {components?.map((item, index) => {
         return <SwiperSlide key={index}>{item}</SwiperSlide>;
       })}
     </Swiper>

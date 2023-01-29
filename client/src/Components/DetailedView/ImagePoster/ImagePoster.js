@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import Image from "../../../UI/Image/Image";
+import Skeleton from "../../../UI/Skeleton/Skeleton";
 
-function ImagePoster() {
-  const poster =
-    "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21-tXMN3Y20PIL9.jpg";
+function ImagePoster({ poster, isLoading, lowQualityPoster }) {
   return (
-    <article className="movie-card w-[185px]  ">
-      <div className=" h-[265px] overflow-hidden rounded">
-        <img
-          className="w-full h-full duration-500"
-          alt="movie poster"
-          src={poster}
-        />
+    <article className="movie-card">
+      <div className="h-[322px]  w-[215px] rounded">
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <Image
+            className={"w-full h-full duration-500 rounded shadow-2xl object-cover"}
+            lowQualityImageURL={lowQualityPoster}
+            highQualityImageURL={poster}
+          />
+        )}
       </div>
     </article>
   );

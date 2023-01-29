@@ -18,6 +18,7 @@ module.exports = {
         // "my-red-100": "rgba(204,0,0,0.9)",
         "my-red-100": "#d93025",
         "placeholder-ash": "#9ca3af",
+        "skeleton-color": "#26304b",
       },
       boxShadow: {
         suttle: "rgba(41, 40, 52, 0.1) 0px 4px 12px;",

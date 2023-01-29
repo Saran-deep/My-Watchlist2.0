@@ -19,12 +19,6 @@ const makeAPICall = async (options) => {
 
     const response = await Promise.race([fetchPro, timeout(15)]);
 
-    // console.log(res);
-    // if (!res.ok) throw new Error(`${data.message} (${res.status})`);
-    // if (!res.ok) throw res;
-
-    // const data = await res.json();
-
     return response;
   } catch (err) {
     throw err;

@@ -42,6 +42,54 @@ const attributes = `
   description,
 `;
 
+const castAttribute = `
+characters(sort:ROLE){
+  edges {
+    node {
+      name {
+        full
+      }
+      image {
+        large
+        medium
+      }
+    }
+    voiceActors(language:JAPANESE){
+      id
+      name {
+        full
+      }
+      image {
+        large
+        medium
+      },
+      languageV2,
+    }
+  }
+},
+duration,
+source,
+favourites,
+season,
+meanScore,
+averageScore,
+studios {
+  edges {
+    node {
+      id,
+      name,
+      isAnimationStudio
+    }
+  }
+},
+`;
+
+const GET_ANIME_QUERY = `query($id: Int){
+  Media(id: $id){
+    ${attributes + castAttribute}
+  }
+}`;
+
 const TRENDING_ANIMES_QUERY = `query($pageNo:Int, $itemsPerPage:Int){
     Page(page:$pageNo, perPage:$itemsPerPage){
       pageInfo {
@@ -76,26 +124,8 @@ const UPCOMING_ANIMES_QUERY = `query ($pageNo:Int,$itemsPerPage:Int) {
 module.exports = {
   UPCOMING_ANIMES_QUERY,
   TRENDING_ANIMES_QUERY,
+  GET_ANIME_QUERY,
   ITEMS_PER_PAGE,
   TIMEOUT_SEC,
   ANIME_API_URL,
 };
-
-// const fetchPro = uploadData
-//   ? fetch(url, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(uploadData),
-//     })
-//   : fetch(url, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         query: query,
-//         variables: variables,
-//       }),
-//     });

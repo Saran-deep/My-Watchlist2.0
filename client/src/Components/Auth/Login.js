@@ -16,7 +16,9 @@ function Login(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, error, status } = useSelector((store) => store.auth);
+  const { isLoading, error, status, formSubmitted } = useSelector(
+    (store) => store.auth
+  );
 
   const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -82,7 +84,7 @@ function Login(props) {
               </div>
             </Button>
           </div>
-          {error ? (
+          {formSubmitted && error ? (
             <p className=" text-my-red-100  uppercase text-xs">{error}</p>
           ) : (
             " "

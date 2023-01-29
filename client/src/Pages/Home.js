@@ -1,50 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import HeroSection from "../Components/Home/HeroSection/HeroSection";
-import MovieCard from "../Components/Home/MovieCard/MovieCard";
-import Carousel from "../UI/Carousel/Carousel";
-import HomeSectionHeading from "../Components/Home/HomeSectionHeading/HomeSectionHeading";
-import NavBar from "../Components/NavBar/NavBar";
-import useFetch from "../Utils/useFetch";
 import MoviesTray from "../Components/Home/MoviesTray/MoviesTray";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  trendingAnimes,
+  upComingAnimes,
+  getHomePageContents,
+  haveHomeData,
+} from "../redux/Features/Home/homeSlice";
 
 function Home() {
-  const [trendingAnimesData, setTrendingAnimesData] = useState(null);
-  const [upComingAnimesData, setUpcomingAnimesData] = useState(null);
+  const dispatch = useDispatch();
 
-  const { response, error, loading } = useFetch({
-    url: "/anime/home",
-    options: { method: "get" },
-  });
+  const { isLoading, error, status } = useSelector((state) => state.home);
+  const trendingAnimesData = useSelector(trendingAnimes);
+  const upComingAnimesData = useSelector(upComingAnimes);
+  const haveHomedata = useSelector(haveHomeData);
+
   useEffect(() => {
-    if (response) {
-      const { data } = response;
-
-      setTrendingAnimesData(data.trendingAnimes.media);
-      setUpcomingAnimesData(data.upcomingAnimes.media);
-    }
-  }, [response]);
+    if (haveHomedata) return;
+    dispatch(getHomePageContents());
+  }, []);
 
   return (
     <>
       <HeroSection />
-      {!loading && upComingAnimesData ? (
-        <>
-          <MoviesTray
-            data={trendingAnimesData}
-            carouselTitle={"Top Airing"}
-            key={"Top Airing"}
-          />
-          <MoviesTray
-            data={upComingAnimesData}
-            carouselTitle={"Upcoming Animes"}
-            key={"Upcoming Animes"}
-          />
-        </>
-      ) : (
-        <h1 className=" flex justify-center text-center	 text-white">
-          Loading Data, Please wait....
-        </h1>
-      )}
+      <MoviesTray
+        data={trendingAnimesData}
+        carouselTitle={"Top Airing"}
+        key={"Top Airing"}
+        isLoading={isLoading}
+      />
+      <MoviesTray
+        data={upComingAnimesData}
+        carouselTitle={"Upcoming Animes"}
+        key={"Upcoming Animes"}
+        isLoading={isLoading}
+      />
     </>
   );
 }

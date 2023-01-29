@@ -1,15 +1,22 @@
 import React from "react";
+import Image from "../../../UI/Image/Image";
 
-function CoverImage() {
-  const bannerImageURL =
-    "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg";
-  const greadient =
-    "linear-gradient(0deg, rgba(15,16,43,0.896796218487395) 5%, rgba(15,16,43,0.7) 20%, rgba(15,16,43,0.6222864145658263) 26%, rgba(255,255,255,0) 73%)";
+function CoverImage({ coverImage, isLoading, color }) {
   return (
     <div
-      style={{ backgroundImage: `${greadient}, url(${bannerImageURL})` }}
-      className=" h-full w-full rounded bg-no-repeat bg-cover bg-center"
-    ></div>
+      className="h-full w-full rounded relative overflow-hidden"
+      style={{ backgroundColor: color }}
+    >
+      {isLoading ? null : coverImage ? (
+        <Image
+          highQualityImageURL={coverImage}
+          lowQualityImageURL={coverImage}
+          alt="anime coverimage"
+          className="object-cover w-full h-full rounded"
+        />
+      ) : null}
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-b from-transparent to-my-ebonyClay-100"></div>
+    </div>
   );
 }
 

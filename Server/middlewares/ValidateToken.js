@@ -20,8 +20,10 @@ module.exports = validateToken = async (req, res, next) => {
 
   try {
     verifiedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    if (!verifiedToken)
+      return res.status(401).json({ message: "Token expired", status: false });
   } catch (err) {
-    res.status(401).json({ message: err.message, status: false });
+    return res.status(401).json({ message: err.message, status: false });
   }
 
   if (verifiedToken.exp < Date.now() / 1000)

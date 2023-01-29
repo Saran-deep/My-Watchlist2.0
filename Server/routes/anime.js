@@ -5,12 +5,13 @@ const {
   ITEMS_PER_PAGE,
   TRENDING_ANIMES_QUERY,
   UPCOMING_ANIMES_QUERY,
+  GET_ANIME_QUERY,
 } = require("../config/anime-API-config");
+const HandleAnilistError = require("../utils/HandleAnilistError");
 
 const router = express.Router();
 
 const axiosInstance = axios.create({
-  // baseURL: "https://kitsu.io/api/edge",
   baseURL: ANIME_API_URL,
 });
 
@@ -30,20 +31,43 @@ router.get("/home", async (req, res) => {
       status: true,
     });
   } catch (err) {
-    res.status(503).json({ message: err.message, status: false });
+    HandleAnilistError(err, res);
   }
 });
 
-// const getTopAiringAnimes = async () => {
-//   try {
-//     const response = await axiosInstance.get(
-//       "/trending/anime"
-//     );
-//     return response.data;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
+router.get("/get-anime/:id", async (req, res) => {
+  const animeId = req.params.id;
+
+  if (!animeId)
+    return res
+      .status(400)
+      .json({ message: "Anime Id parameter is required", status: false });
+
+  try {
+    const variable = JSON.stringify({
+      id: animeId,
+    });
+
+    const requestOptions = {
+      headers: { "Content-Type": "application/json" },
+    };
+    const data = {
+      query: GET_ANIME_QUERY,
+      variables: variable,
+    };
+
+    const response = await axiosInstance.post("/", data, requestOptions);
+
+    res.status(200).json({
+      message: "Anime fetched sucessfully",
+      animeDetails: { ...response.data.data.Media },
+      status: true,
+    });
+  } catch (err) {
+    console.log(err);
+    HandleAnilistError(err, res);
+  }
+});
 
 const getTrendingAnimes = async () => {
   const variable = JSON.stringify({
@@ -63,7 +87,6 @@ const getTrendingAnimes = async () => {
 
     return response.data;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
@@ -92,3 +115,36 @@ const getUpcomingAnimes = async () => {
 };
 
 module.exports = router;
+
+// Query to get the voice actors
+// {
+//   Media(id: 20, type: ANIME) {
+//     id
+//     title {
+//       english
+//     }
+    // characters(role:MAIN){
+    //   edges {
+    //     node {
+    //       name {
+    //         full
+    //       }
+    //       image {
+    //         large
+    //         medium
+    //       }
+    //     }
+    //     voiceActors(language:JAPANESE){
+    //       id
+    //       name {
+    //         full
+    //       }
+    //       image {
+    //         large
+    //         medium
+    //       }
+    //     }
+    //   }
+    // }
+//   }
+// }
