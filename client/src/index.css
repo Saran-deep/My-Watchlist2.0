@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+html,
+body {
+  /* width: 100vw; */
+  height: 100%;
+  background-color: #0f102b;
+}
+body {
+  padding: 0.75rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+}
+
+.meta-data:not(:last-child):after {
+  content: "\00B7";
+  font-size: 1.7rem;
+  line-height: 0.5rem;
+  text-decoration: none;
+  padding: 0 6px;
+  vertical-align: middle;
+}
+
+.movie-card__poster::before {
+  background: linear-gradient(0deg, #24243c 45%, transparent);
+}
+
+.movie-card:hover .movie-card__poster::before {
+  bottom: 0;
+}
+
+.movie-card:hover .movie-card__poster img {
+  transform: translateY(-50px);
+  filter: blur(2px);
+}
+
+.movie-card:hover .movie-card__details {
+  bottom: 0px;
+}
+
+.swiper-button-disabled {
+  display: none !important;
+}
