@@ -25,7 +25,7 @@ const RenderCarousel = (props) => {
   return (
     <div className="carousel">
       {isLoading ? (
-        <Skeleton className=" h-8 w-1/4 my-3" />
+        <Skeleton className="h-8 w-1/4 my-3" />
       ) : (
         <HomeSectionHeading>{carouselTitle}</HomeSectionHeading>
       )}
@@ -39,7 +39,7 @@ const carouselItems = (data, isLoading) => {
   const dummyArray = Array.from(new Array(6));
   return isLoading
     ? dummyArray.map((_, index) => (
-        <Skeleton className="w-[185px] h-[256px]" key={index} />
+        <Skeleton className="w-full !h-[285px]" key={index} />
       ))
     : data?.map((item) => {
         return (

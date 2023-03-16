@@ -3,10 +3,16 @@ import Button from "../../../UI/Button/Button";
 import MetaData from "../../../UI/MetaData/MetaData";
 import Skeleton from "../../../UI/Skeleton/Skeleton";
 import SubDetails from "./SubDetails";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWatchlist } from "../../../redux/Features/Watchlist/watchlistSlice";
+import AddToWatchlistButton from "../../AddToWatchlistButton";
 
 function MovieDetails(props) {
   const { details, isLoading } = props;
-
+  const dispatch = useDispatch();
+  const { isLoading: addingToWatchlist } = useSelector(
+    (state) => state.watchlist
+  );
   const metaItems = [
     "Series (1999 - )",
     `Episodes: ${details?.episodes}`,
@@ -18,7 +24,14 @@ function MovieDetails(props) {
     }`,
   ];
 
-  console.log(details);
+  let watchlistingDetails;
+
+  if (details) {
+    watchlistingDetails = {
+      animeId: details.id,
+      nextAiringEpisode: details.nextAiringEpisode,
+    };
+  }
 
   const getStudioNames = (studios) => {
     return studios?.edges
@@ -74,7 +87,7 @@ function MovieDetails(props) {
         {isLoading ? (
           <Skeleton className="h-10 w-1/3" />
         ) : (
-          <Button primary={true}>ADD TO WATCHLIST</Button>
+          <AddToWatchlistButton detail={watchlistingDetails} />
         )}
       </div>
       <div className="">
