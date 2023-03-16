@@ -1,41 +1,46 @@
 import React, { useEffect } from "react";
 import HeroSection from "../Components/Home/HeroSection/HeroSection";
 import MoviesTray from "../Components/Home/MoviesTray/MoviesTray";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  trendingAnimes,
-  upComingAnimes,
-  getHomePageContents,
-  haveHomeData,
-} from "../redux/Features/Home/homeSlice";
+import { useQuery } from "@apollo/client";
+import { GET_HOME_DATA } from "../GraphQl/Queries";
+import SnackBar from "../UI/SnackBar/SnackBar";
 
 function Home() {
-  const dispatch = useDispatch();
-
-  const { isLoading, error, status } = useSelector((state) => state.home);
-  const trendingAnimesData = useSelector(trendingAnimes);
-  const upComingAnimesData = useSelector(upComingAnimes);
-  const haveHomedata = useSelector(haveHomeData);
+  const {
+    loading: loading,
+    error: error,
+    data: data,
+  } = useQuery(GET_HOME_DATA, {
+    variables: {
+      pageNo: 1,
+      itemsPerPage: 30,
+    },
+  });
 
   useEffect(() => {
-    if (haveHomedata) return;
-    dispatch(getHomePageContents());
-  }, []);
+    if (!data) return;
+    console.log(data);
+  }, [data]);
 
   return (
     <>
-      <HeroSection />
-      <MoviesTray
-        data={trendingAnimesData}
-        carouselTitle={"Top Airing"}
-        key={"Top Airing"}
-        isLoading={isLoading}
+      <HeroSection
+        heroData={data?.trendingAnimesPage.trendingAnimes}
+        isLoading={loading}
       />
       <MoviesTray
-        data={upComingAnimesData}
+        data={data?.trendingAnimesPage.trendingAnimes.filter(
+          (item, index) => index > 0
+        )}
+        carouselTitle={"Top Airing"}
+        key={"Top Airing"}
+        isLoading={loading}
+      />
+      <MoviesTray
+        data={data?.upcomingAnimesPage.upcomingAnimes}
         carouselTitle={"Upcoming Animes"}
         key={"Upcoming Animes"}
-        isLoading={isLoading}
+        isLoading={loading}
       />
     </>
   );

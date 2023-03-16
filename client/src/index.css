@@ -33,7 +33,7 @@ body {
   vertical-align: middle;
 }
 
-.movie-card__poster::before {
+/* .movie-card__poster::before {
   background: linear-gradient(0deg, #24243c 45%, transparent);
 }
 
@@ -48,8 +48,18 @@ body {
 
 .movie-card:hover .movie-card__details {
   bottom: 0px;
-}
+} */
 
 .swiper-button-disabled {
   display: none !important;
+}
+
+.notification:hover .notification__closeIcon {
+  visibility: visible;
+  opacity: 1;
+}
+
+.cardImage:hover .cardImage__removeBtn {
+  opacity: 1 !important;
+  visibility: visible;
 }

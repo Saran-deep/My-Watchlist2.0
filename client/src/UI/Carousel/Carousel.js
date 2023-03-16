@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 function Carousel({ components }) {
   return (
     <Swiper
-      modules={[FreeMode, Keyboard, Mousewheel, Navigation, Lazy]}
+      modules={[FreeMode, Keyboard, Navigation, Lazy]}
       spaceBetween={10}
       preloadImages={false}
       keyboard={true}

@@ -1,28 +1,24 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CastAndCrew from "../Components/DetailedView/CastAndCrew/CastAndCrew";
 import CoverImage from "../Components/DetailedView/CoverImage.js/CoverImage";
 import ImagePoster from "../Components/DetailedView/ImagePoster/ImagePoster";
 import MovieDetails from "../Components/DetailedView/MovieDetails/MovieDetails";
-import {
-  selectAnimeDetails,
-  getAnime,
-  resetState,
-} from "../redux/Features/Anime/animeSlice";
+import { useQuery } from "@apollo/client";
+import { GET_ANIME } from "../GraphQl/Queries";
 
 function DetailedView() {
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const { isLoading, error, status } = useSelector((state) => state.anime);
-  const animeDetails = useSelector(selectAnimeDetails);
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(getAnime(parseInt(id)));
-    return () => dispatch(resetState());
   }, []);
 
-  console.log(isLoading);
+  const { id } = useParams();
+
+  const { loading, error, data } = useQuery(GET_ANIME, {
+    variables: { id: parseInt(id) },
+  });
+
+  const animeDetails = data?.Media;
 
   return (
     <section>
@@ -30,7 +26,7 @@ function DetailedView() {
         <div className="w-full h-1/3 md:h-2/4 lg:h-2/3 rounded">
           <CoverImage
             coverImage={animeDetails?.bannerImage}
-            isLoading={isLoading}
+            isLoading={loading}
             color={animeDetails?.coverImage.color}
           />
         </div>
@@ -40,20 +36,20 @@ function DetailedView() {
               <ImagePoster
                 poster={animeDetails?.coverImage.extraLarge}
                 lowQualityPoster={animeDetails?.coverImage.medium}
-                isLoading={isLoading}
+                isLoading={loading}
                 color={animeDetails?.coverImage.color}
               />
             </div>
             <div className="">
               <MovieDetails
                 details={animeDetails ? animeDetails : null}
-                isLoading={isLoading}
+                isLoading={loading}
               />
             </div>
             <div className="max-w-[340px] mx-auto md:col-start-2 md:col-end-3 md:mx-0 xl:col-start-auto xl:col-end-auto">
               <CastAndCrew
                 cast={animeDetails?.characters.edges}
-                isLoading={isLoading}
+                isLoading={loading}
               />
             </div>
           </div>

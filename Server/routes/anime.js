@@ -115,36 +115,3 @@ const getUpcomingAnimes = async () => {
 };
 
 module.exports = router;
-
-// Query to get the voice actors
-// {
-//   Media(id: 20, type: ANIME) {
-//     id
-//     title {
-//       english
-//     }
-    // characters(role:MAIN){
-    //   edges {
-    //     node {
-    //       name {
-    //         full
-    //       }
-    //       image {
-    //         large
-    //         medium
-    //       }
-    //     }
-    //     voiceActors(language:JAPANESE){
-    //       id
-    //       name {
-    //         full
-    //       }
-    //       image {
-    //         large
-    //         medium
-    //       }
-    //     }
-    //   }
-    // }
-//   }
-// }

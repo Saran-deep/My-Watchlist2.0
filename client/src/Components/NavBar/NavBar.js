@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../redux/Features/Auth/authSlice";
+import { FaBell } from "react-icons/fa";
+import SidePannel from "../SidePannel";
+import useToggle from "../../Utils/useToggle";
+import Notification from "../../UI/Notification";
 
 function NavBar() {
   const { userId, username, isLoggedIn } = useSelector(
@@ -26,11 +30,17 @@ function NavBar() {
   const navitems = [
     { label: "Home", path: "/" },
     { label: "Contacts", path: "/" },
-    { label: "WatchList", path: "/" },
+    { label: "WatchList", path: "/user/watchlist" },
     isLoggedIn
       ? { label: "Logout", path: "#" }
       : { label: "Login", path: "/auth" },
   ];
+
+  if (isLoggedIn) {
+    navitems.splice(3, 0, { label: "Icon", path: "#" });
+  }
+
+  const [showSidePannel, setShowSidePannel] = useToggle(false);
 
   const renderNavItems = (items) => {
     return items.map(({ label, path }) => (
@@ -43,6 +53,11 @@ function NavBar() {
           >
             {label}
           </Link>
+        ) : label === "Icon" ? (
+          <FaBell
+            onClick={() => setShowSidePannel()}
+            className=" cursor-pointer"
+          />
         ) : (
           <Link to={path} className=" no-underline">
             {label}
@@ -62,13 +77,18 @@ function NavBar() {
             <h1 className=" p-4 text-xl">My WatchList</h1>
           </div>
           <div>
-            <ul className=" flex flex-row space-x-5 last:mr-3 text-sm">
+            <ul className=" flex flex-row space-x-5 last:mr-3 text-sm items-center">
               {renderNavItems(navitems)}
             </ul>
           </div>
         </nav>
       </header>
       <div id="dummyContainer"></div>
+      <SidePannel show={showSidePannel} toggleShow={setShowSidePannel}>
+        <Notification />
+        <Notification />
+        <Notification />
+      </SidePannel>
     </>
   );
 }

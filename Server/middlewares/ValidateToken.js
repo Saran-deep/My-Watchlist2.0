@@ -8,7 +8,7 @@ module.exports = validateToken = async (req, res, next) => {
   if (!authorization)
     return res
       .status(401)
-      .send({ status: false, message: "No token provided." });
+      .json({ status: false, message: "No token provided." });
   const token = authorization.split(" ")[1];
 
   if (!token && token === null)
@@ -30,7 +30,7 @@ module.exports = validateToken = async (req, res, next) => {
     return res.status(401).json({ message: "Token expired", status: false });
 
   if (!mongoose.Types.ObjectId.isValid(verifiedToken.userId))
-    return res.send(401).json({
+    return res.status(401).json({
       message: "Something wrong with UserId.",
       status: false,
     });
@@ -41,11 +41,11 @@ module.exports = validateToken = async (req, res, next) => {
     user = await User.findOne({ userId: verifiedToken.userId });
     userToken = await Tokens.findOne({ userId: verifiedToken.userId });
   } catch (err) {
-    return res.send(500).json({ message: err.message, status: false });
+    return res.status(500).json({ message: err.message, status: false });
   }
 
   if (!user)
-    return res.send(404).json({ message: "User not found.", status: false });
+    return res.status(404).json({ message: "User not found.", status: false });
 
   if (!userToken)
     return res.status(404).json({ message: "User not found.", status: false });
