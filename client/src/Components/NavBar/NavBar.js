@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { logoutUser } from "../../redux/Features/Auth/authSlice";
 import { FaBell } from "react-icons/fa";
 import SidePannel from "../SidePannel";
 import useToggle from "../../Utils/useToggle";
 import Notification from "../../UI/Notification";
+import { BiSearch } from "react-icons/bi";
 
 function NavBar() {
   const { userId, username, isLoggedIn } = useSelector(
@@ -72,9 +73,12 @@ function NavBar() {
         id="header"
         className=" fixed top-0 left-0 w-full p-[0.75rem] z-50"
       >
-        <nav className=" flex flex-row justify-between items-center bg-my-ebonyClay-200 text-my-white-300 mb-[0.75rem] rounded shadow-md">
+        <nav className="flex flex-row justify-between items-center bg-my-ebonyClay-200 text-my-white-300 mb-[0.75rem] rounded shadow-md">
           <div>
             <h1 className=" p-4 text-xl">My WatchList</h1>
+          </div>
+          <div>
+            <SearchInput />
           </div>
           <div>
             <ul className=" flex flex-row space-x-5 last:mr-3 text-sm items-center">
@@ -94,3 +98,26 @@ function NavBar() {
 }
 
 export default NavBar;
+
+const SearchInput = () => {
+  return (
+    <div className="flex-1">
+      <div className=" rounded border focus-within:border-0 focus-within:border-transparent border-placeholder-ash transition-colors duration-150">
+        <div className="rounded border focus-within:border-2 focus-within:border-solid focus-within:border-my-ebonyClay-400 box-border border-transparent bg-my-ebonyClay-300 transition-colors duration-150">
+          <Form className="flex items-center" method="get" action="/search">
+            <input
+              type="text"
+              name="q"
+              autoComplete="off"
+              placeholder="Search animes"
+              className="w-full rounded text-my-white-100 placeholder:text-placeholder-ash border-0  bg-my-ebonyClay-300 outline-none p-2"
+            />
+            <button className="mr-2 cursor-pointer">
+              <BiSearch fontSize="1.4rem" className="text-placeholder-ash" />
+            </button>
+          </Form>
+        </div>
+      </div>
+    </div>
+  );
+};

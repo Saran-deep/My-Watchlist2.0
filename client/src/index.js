@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import store from "./redux/store/Store";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
 import {
   ApolloProvider,
   ApolloClient,
@@ -34,13 +33,11 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </ApolloProvider>
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>
 );
 
