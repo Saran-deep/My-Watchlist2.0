@@ -9,21 +9,28 @@ const WatchList = require("../model/WatchList");
 const ValidateToken = require("../middlewares/ValidateToken");
 
 router.post("/add-to-watchlist", validateToken, async (req, res) => {
-  console.log(req.body);
   const animeId = req.body.animeId;
   const nextAiringEpisode = req.body.nextAiringEpisode;
+  const isAiring = req.body.isAiring;
 
   if (!animeId)
     return res
       .status(400)
       .json({ message: "animeId is not provided.", status: false });
-  if (!nextAiringEpisode)
+
+  if (isAiring === undefined)
+    return res.status(400).json({
+      message: "isAiring value is not provided.",
+      status: false,
+    });
+
+  if (isAiring && !nextAiringEpisode)
     return res.status(400).json({
       message: "Next airing shedule is not provided.",
       status: false,
     });
 
-  if (_.isEmpty(nextAiringEpisode))
+  if (isAiring && _.isEmpty(nextAiringEpisode))
     return res.status(400).json({
       message: "Next airing shedule is not provided.",
       status: false,
@@ -42,6 +49,7 @@ router.post("/add-to-watchlist", validateToken, async (req, res) => {
             nextAiringEpisode: nextAiringEpisode,
             animeId: animeId,
             isAnime: true,
+            isAiring: isAiring,
           },
         ],
       });
@@ -51,6 +59,7 @@ router.post("/add-to-watchlist", validateToken, async (req, res) => {
         nextAiringEpisode: nextAiringEpisode,
         animeId: animeId,
         isAnime: true,
+        isAiring: isAiring,
       });
 
       newWatchList = await watchList.save();

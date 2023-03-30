@@ -77,7 +77,7 @@ function NavBar() {
           <div>
             <h1 className=" p-4 text-xl">My WatchList</h1>
           </div>
-          <div>
+          <div className="w-2/5">
             <SearchInput />
           </div>
           <div>
@@ -101,7 +101,7 @@ export default NavBar;
 
 const SearchInput = () => {
   return (
-    <div className="flex-1">
+    <div className="w-full">
       <div className=" rounded border focus-within:border-0 focus-within:border-transparent border-placeholder-ash transition-colors duration-150">
         <div className="rounded border focus-within:border-2 focus-within:border-solid focus-within:border-my-ebonyClay-400 box-border border-transparent bg-my-ebonyClay-300 transition-colors duration-150">
           <Form className="flex items-center" method="get" action="/search">

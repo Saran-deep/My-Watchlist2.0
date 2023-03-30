@@ -1,7 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
+    screens: {
+      ...defaultTheme.screens,
+      phone: "520px",
+    },
     extend: {
       // display: ["notification-hover"],
       backgroundImage: {

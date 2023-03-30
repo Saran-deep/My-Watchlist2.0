@@ -16,9 +16,15 @@ function HeroSection({ heroData, isLoading }) {
   let watchlistingDetails;
 
   if (heroData) {
+    const { status } = heroData[0];
     watchlistingDetails = {
       animeId: heroData[0].id,
       nextAiringEpisode: heroData[0].nextAiringEpisode,
+      isAiring:
+        status !== "NOT_YET_RELEASED" &&
+        status !== "FINISHED" &&
+        status !== "CANCELLED" &&
+        status !== "HIATUS",
     };
   }
 
@@ -52,26 +58,6 @@ function HeroSection({ heroData, isLoading }) {
       </div>
     </>
   );
-}
-
-{
-  /* <div
-      id="heroSection"
-      style={{ backgroundImage: `${greadient}, url(${bannerImageURL})` }}
-      className="h-3/4 bg-slate-500 rounded bg-no-repeat bg-cover bg-center flex"
-    >
-      <div className="mb-16 pl-10 self-end space-y-3.5 last:after:content-['\B7']">
-        <h1 className="text-5xl text-white">Jujutsu Kaisen</h1>
-        <div className="">
-          <MetaData items={["2020", "Action", "Drama"]} />
-        </div>
-        <p className=" text-my-white-100">
-          Status: <Badge>COMPLETED</Badge>
-        </p>
-
-        <Button primary={true}>ADD TO WATCHLIST</Button>
-      </div>
-    </div> */
 }
 
 export default HeroSection;
