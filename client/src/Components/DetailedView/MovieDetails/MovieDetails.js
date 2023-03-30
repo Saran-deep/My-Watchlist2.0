@@ -27,9 +27,15 @@ function MovieDetails(props) {
   let watchlistingDetails;
 
   if (details) {
+    const { status } = details;
     watchlistingDetails = {
       animeId: details.id,
       nextAiringEpisode: details.nextAiringEpisode,
+      isAiring:
+        status !== "NOT_YET_RELEASED" &&
+        status !== "FINISHED" &&
+        status !== "CANCELLED" &&
+        status !== "HIATUS",
     };
   }
 
@@ -66,6 +72,8 @@ function MovieDetails(props) {
       renderCloudChip: true,
     },
   ];
+
+  console.log(watchlistingDetails);
 
   return (
     <div className="space-y-5 md:pr-5">

@@ -202,6 +202,8 @@ export const HERO_QUERY = gql`
         title {
           romaji
           english
+          native
+          userPreferred
         }
         coverImage {
           large
@@ -221,6 +223,33 @@ export const GET_ANIMES_OF_WATCHLIST = gql`
           romaji
           english
           native
+          userPreferred
+        }
+        coverImage {
+          medium
+          large
+          extraLarge
+        }
+      }
+    }
+  }
+`;
+
+export const SEARCH_ANIME = gql`
+  query SearchAnime($search: String!) {
+    animeDetails: Page(page: 1, perPage: 40) {
+      media(
+        search: $search
+        type: ANIME
+        sort: SEARCH_MATCH
+        genre_not_in: "hentai"
+      ) {
+        id
+        title {
+          romaji
+          english
+          native
+          userPreferred
         }
         coverImage {
           medium
