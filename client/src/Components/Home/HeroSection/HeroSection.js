@@ -15,6 +15,13 @@ function HeroSection({ heroData, isLoading }) {
 
   let watchlistingDetails;
 
+  console.log(heroData[0]);
+
+  const metaDeatils = [
+    heroData[0]?.seasonYear,
+    heroData[0]?.format,
+    ...heroData[0].genres.slice(0, 2),
+  ];
   if (heroData) {
     const { status } = heroData[0];
     watchlistingDetails = {
@@ -46,10 +53,10 @@ function HeroSection({ heroData, isLoading }) {
             <div className="mb-16 pl-10 self-end space-y-3.5 last:after:content-['\B7']">
               <h1 className="text-5xl text-white">{title}</h1>
               <div className="">
-                <MetaData items={["2020", "Action", "Drama"]} />
+                <MetaData items={metaDeatils} />
               </div>
               <p className=" text-my-white-100">
-                Status: <Badge>COMPLETED</Badge>
+                Status: <Badge>{heroData[0]?.status}</Badge>
               </p>
               <AddToWatchlistButton detail={watchlistingDetails} />
             </div>

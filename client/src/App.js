@@ -1,7 +1,12 @@
 import Authentication from "./Pages/Authentication";
 import CreateUsername from "./Pages/CreateUsername";
 import Home from "./Pages/Home";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/Features/Auth/authSlice";
 import { useEffect } from "react";
@@ -14,19 +19,11 @@ import SearchResult from "./Pages/SearchResult";
 
 function App() {
   const dispatch = useDispatch();
-  const { userId, username, isLoggedIn } = useSelector(
-    (store) => store.auth.user
-  );
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")?.length > 0) return;
     dispatch(getUser());
   }, []);
-
-  useEffect(() => {
-    if (!isLoggedIn) return;
-    dispatch(getUserWatchList());
-  }, [isLoggedIn]);
 
   const routers = createBrowserRouter([
     {
@@ -74,6 +71,22 @@ function App() {
 export default App;
 
 const Layout = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { userId, username, isLoggedIn } = useSelector(
+    (store) => store.auth.user
+  );
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    if (!username) {
+      navigate("/auth/create-uername", { replace: true });
+    }
+    dispatch(getUserWatchList());
+  }, [isLoggedIn]);
+
   return (
     <>
       <NavBar />

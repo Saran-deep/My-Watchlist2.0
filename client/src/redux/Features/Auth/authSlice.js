@@ -82,6 +82,7 @@ const authSlice = createSlice({
       state.user.username = null;
       state.user.userId = null;
       state.user.isLoggedIn = false;
+      state.status = null;
     },
   },
   extraReducers: (builder) => {
@@ -93,6 +94,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.user.userId = payload.data.userId;
+        state.user.username = payload.data.username;
         localStorage.setItem("accessToken", payload.data.accessToken);
         localStorage.setItem("refreshToken", payload.data.refreshToken);
         state.status = "succeeded";
@@ -139,6 +141,7 @@ const authSlice = createSlice({
         state.user.isLoggedIn = false;
       })
       .addCase(getUser.fulfilled, (state, { payload }) => {
+        console.log(payload);
         state.user.userId = payload.data.userId;
         state.user.username = payload.data.username;
         state.user.isLoggedIn = true;

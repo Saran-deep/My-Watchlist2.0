@@ -30,15 +30,16 @@ function NavBar() {
 
   const navitems = [
     { label: "Home", path: "/" },
-    { label: "Contacts", path: "/" },
-    { label: "WatchList", path: "/user/watchlist" },
-    isLoggedIn
-      ? { label: "Logout", path: "#" }
-      : { label: "Login", path: "/auth" },
+    ...(isLoggedIn
+      ? [
+          { label: "WatchList", path: "/user/watchlist" },
+          { label: "Logout", path: "#" },
+        ]
+      : [{ label: "Login", path: "/auth" }]),
   ];
 
   if (isLoggedIn) {
-    navitems.splice(3, 0, { label: "Icon", path: "#" });
+    navitems.splice(2, 0, { label: "Icon", path: "#" });
   }
 
   const [showSidePannel, setShowSidePannel] = useToggle(false);
