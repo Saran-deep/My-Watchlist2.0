@@ -9,12 +9,13 @@ import AddToWatchlistButton from "../../AddToWatchlistButton";
 
 function MovieDetails(props) {
   const { details, isLoading } = props;
-  const dispatch = useDispatch();
+
   const { isLoading: addingToWatchlist } = useSelector(
     (state) => state.watchlist
   );
+
+  // console.log(details);
   const metaItems = [
-    "Series (1999 - )",
     `Episodes: ${details?.episodes}`,
     `Format: ${details?.format}`,
     `Status: ${
@@ -72,8 +73,6 @@ function MovieDetails(props) {
       renderCloudChip: true,
     },
   ];
-
-  console.log(watchlistingDetails);
 
   return (
     <div className="space-y-5 md:pr-5">

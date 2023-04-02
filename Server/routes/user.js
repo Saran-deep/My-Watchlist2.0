@@ -93,6 +93,7 @@ router.post("/login", Validator("login"), async (req, res) => {
         refreshToken: newToken.refreshToken,
         status: true,
         userId: user._id,
+        username: user.username,
       });
   } catch (err) {
     res.status(500).json({ message: err.message, status: false });
